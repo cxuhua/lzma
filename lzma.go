@@ -25,7 +25,7 @@ func Uncompress(src []byte) ([]byte, error) {
 	return ret, nil
 }
 
-func Compress(src []byte) ([]byte, error) {
+func Compress(src []byte, level int) ([]byte, error) {
 	l := len(src)
 	if l == 0 {
 		return nil, errors.New("src data error")
@@ -34,7 +34,7 @@ func Compress(src []byte) ([]byte, error) {
 	var srclen C.int = C.int(C.cxLzmaGetCompressLen(C.int(l)))
 	var ret []byte = make([]byte, int(srclen))
 	var dstptr *C.char = (*C.char)(unsafe.Pointer(&ret[0]))
-	if C.cxLzmaCompress(srcptr, C.int(l), dstptr, &srclen) == nil {
+	if C.cxLzmaCompress(srcptr, C.int(l), dstptr, &srclen, C.int(level)) == nil {
 		return nil, errors.New("compress failed")
 	}
 	return ret[0:int(srclen)], nil

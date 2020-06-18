@@ -22,16 +22,19 @@ int cxLzmaGetCompressLen(int srcLen)
     return srcLen * 1.1f + LZMA_PROPS_SIZE + sizeof(LzmaDataHead);
 }
 
-char *cxLzmaCompress(const char *psrc,int asrcLen,char *pdst,int *pdstLen)
+char *cxLzmaCompress(const char *psrc,int asrcLen,char *pdst,int *pdstLen,int level)
 {
     assert(psrc != NULL && asrcLen > 0 && pdstLen != NULL && pdst != NULL);
+    if(level < 0 || level > 9){
+        level = 5;
+    }
     const unsigned char *src = (const unsigned char *)psrc;
     size_t srcLen = asrcLen;
     unsigned char outProps[LZMA_PROPS_SIZE]={0};
     size_t outPropsLen = LZMA_PROPS_SIZE;
     size_t dstLen = *pdstLen;
     unsigned char *dst = (unsigned char *)(pdst + sizeof(LzmaDataHead));
-    int ret = LzmaCompress(dst, &dstLen, src, srcLen, outProps, &outPropsLen, 5, 1 << 16, 3, 0, 2, 32, 1);
+    int ret = LzmaCompress(dst, &dstLen, src, srcLen, outProps, &outPropsLen, level, 1 << 16, 3, 0, 2, 32, 1);
     if(ret != SZ_OK){
         free(pdst);
         return NULL;

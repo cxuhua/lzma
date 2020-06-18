@@ -24,7 +24,7 @@ int cxLzmaGetCompressLen(int srcLen);
     
 int cxLzmaGetUncompressLen(void *src);
 
-char *cxLzmaCompress(const char *psrc,int asrcLen,char *dst,int *pdesLen);
+char *cxLzmaCompress(const char *psrc,int asrcLen,char *dst,int *pdesLen,int level);
 
 char *cxLzmaUncompress(const char *psrc,int asrcLen,char *dst,int *pdesLen);
 
